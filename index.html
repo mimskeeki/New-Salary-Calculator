@@ -133,6 +133,7 @@
     }
 
     .box.featured .box-currency { color: #44bb88; }
+    .box-badge { display: none; }
 
     .breakdown {
       margin-top: 6px;
@@ -167,8 +168,8 @@
         <div class="breakdown" id="bd-bgn-gross"></div>
       </div>
 
-      <div class="box featured" id="box-eur-gross">
-        <div class="box-label">EUR Gross <span class="box-badge">primary</span></div>
+      <div class="box" id="box-eur-gross">
+        <div class="box-label">EUR Gross</div>
         <input type="number" id="eur-gross" placeholder="0.00" min="0" oninput="recalc('eur-gross')" />
         <div class="box-currency">Euros · before tax</div>
         <div class="breakdown" id="bd-eur-gross"></div>
@@ -181,12 +182,13 @@
         <div class="breakdown" id="bd-bgn-net"></div>
       </div>
 
-      <div class="box" id="box-eur-net">
+      <div class="box featured" id="box-eur-net">
         <div class="box-label">EUR Net</div>
         <input type="number" id="eur-net" placeholder="0.00" min="0" oninput="recalc('eur-net')" />
         <div class="box-currency">Euros · after tax</div>
         <div class="breakdown" id="bd-eur-net"></div>
       </div>
+
 
     </div>
 
@@ -215,9 +217,7 @@
 
     function setVal(id, val) {
       const el = document.getElementById(id);
-      if (document.activeElement !== el) {
-        el.value = val > 0 ? fmt(val).replace(/\s/g, '') : '';
-      }
+      el.value = val > 0 ? fmt(val).replace(/\s/g, '') : '';
     }
 
     function setBd(id, html) {
