@@ -33,7 +33,7 @@
       color: #6a8fc0;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .subtitle {
@@ -55,7 +55,7 @@
       padding: 1.75rem 1.75rem 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       transition: border-color 0.18s, box-shadow 0.18s;
     }
 
@@ -82,9 +82,7 @@
       color: #7a9fc8;
     }
 
-    .box.featured .box-label {
-      color: #00aa55;
-    }
+    .box.featured .box-label { color: #00aa55; }
 
     .box-badge {
       display: inline-block;
@@ -100,7 +98,26 @@
       vertical-align: middle;
     }
 
-    .box input {
+    /* each box has an input row and an output row, same size */
+    .amount-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .amount-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .entered .amount-tag { color: #5588bb; }
+    .calculated .amount-tag { color: #44aa77; }
+    .box.featured .entered .amount-tag { color: #009944; }
+    .box.featured .calculated .amount-tag { color: #007733; }
+
+    .amount-row input {
       width: 100%;
       background: transparent;
       border: none;
@@ -108,42 +125,52 @@
       border-radius: 0;
       color: #0a1a2e;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 600;
-      padding: 8px 0;
+      padding: 6px 0;
       outline: none;
       transition: border-color 0.18s;
     }
 
-    .box.featured input {
-      font-size: 38px;
+    .amount-row input::placeholder { color: #c0d4ee; }
+    .amount-row input:focus { border-bottom-color: #1aff8c; }
+
+    .box.featured .amount-row input {
+      font-size: 40px;
       border-bottom-color: #99eecc;
       color: #003322;
     }
+    .box.featured .amount-row input::placeholder { color: #99ddbb; }
 
-    .box input::placeholder { color: #c0d4ee; }
-    .box.featured input::placeholder { color: #99ddbb; }
-
-    .box input:focus { border-bottom-color: #1aff8c; }
-
-    .box-currency {
-      font-size: 13px;
-      color: #aabcd8;
-      font-weight: 500;
+    .result-value {
+      font-size: 34px;
+      font-weight: 600;
+      color: #1a9966;
+      padding: 6px 0;
+      border-bottom: 1.5px solid #d0f0e0;
+      min-height: 54px;
+      letter-spacing: -0.01em;
     }
 
-    .box.featured .box-currency { color: #44bb88; }
-    .box-badge { display: none; }
-
-    .breakdown {
-      margin-top: 6px;
-      font-size: 12px;
-      color: #aabcd8;
-      line-height: 1.8;
-      min-height: 20px;
+    .box.featured .result-value {
+      font-size: 40px;
+      color: #00bb55;
+      text-shadow: 0 0 16px rgba(26,255,140,0.35);
+      border-bottom-color: #99eecc;
     }
 
-    .box.featured .breakdown { color: #55aa80; }
+    .result-empty {
+      color: #c0d4ee;
+    }
+
+    .box.featured .result-empty { color: #99ddbb; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #d0e0f4;
+      margin: 0;
+    }
+    .box.featured .divider { border-top-color: #b0eedd; }
 
     .footnote {
       font-size: 11px;
@@ -157,38 +184,65 @@
 <body>
   <div class="card">
     <h1>Salary Calculator</h1>
-    <p class="subtitle">Type in any field — all others update instantly.</p>
+    <p class="subtitle">Type any amount — all other fields update instantly.</p>
 
     <div class="grid">
 
+      <!-- BGN GROSS -->
       <div class="box" id="box-bgn-gross">
         <div class="box-label">BGN Gross</div>
-        <input type="number" id="bgn-gross" placeholder="0.00" min="0" oninput="recalc('bgn-gross')" />
-        <div class="box-currency">Bulgarian lev · before tax</div>
-        <div class="breakdown" id="bd-bgn-gross"></div>
+        <div class="amount-row entered">
+          <span class="amount-tag">You enter · лв. before tax</span>
+          <input type="number" id="in-bgn-gross" placeholder="0.00" min="0" oninput="recalc('bgn-gross')" />
+        </div>
+        <hr class="divider" />
+        <div class="amount-row calculated">
+          <span class="amount-tag">Calculated · лв. before tax</span>
+          <div class="result-value result-empty" id="out-bgn-gross">—</div>
+        </div>
       </div>
 
-      <div class="box" id="box-eur-gross">
-        <div class="box-label">EUR Gross</div>
-        <input type="number" id="eur-gross" placeholder="0.00" min="0" oninput="recalc('eur-gross')" />
-        <div class="box-currency">Euros · before tax</div>
-        <div class="breakdown" id="bd-eur-gross"></div>
+      <!-- EUR GROSS (featured) -->
+      <div class="box featured" id="box-eur-gross">
+        <div class="box-label">EUR Gross <span class="box-badge">primary</span></div>
+        <div class="amount-row entered">
+          <span class="amount-tag">You enter · € before tax</span>
+          <input type="number" id="in-eur-gross" placeholder="0.00" min="0" oninput="recalc('eur-gross')" />
+        </div>
+        <hr class="divider" />
+        <div class="amount-row calculated">
+          <span class="amount-tag">Calculated · € before tax</span>
+          <div class="result-value result-empty" id="out-eur-gross">—</div>
+        </div>
       </div>
 
+      <!-- BGN NET -->
       <div class="box" id="box-bgn-net">
         <div class="box-label">BGN Net</div>
-        <input type="number" id="bgn-net" placeholder="0.00" min="0" oninput="recalc('bgn-net')" />
-        <div class="box-currency">Bulgarian lev · after tax</div>
-        <div class="breakdown" id="bd-bgn-net"></div>
+        <div class="amount-row entered">
+          <span class="amount-tag">You enter · лв. after tax</span>
+          <input type="number" id="in-bgn-net" placeholder="0.00" min="0" oninput="recalc('bgn-net')" />
+        </div>
+        <hr class="divider" />
+        <div class="amount-row calculated">
+          <span class="amount-tag">Calculated · лв. after tax</span>
+          <div class="result-value result-empty" id="out-bgn-net">—</div>
+        </div>
       </div>
 
-      <div class="box featured" id="box-eur-net">
+      <!-- EUR NET -->
+      <div class="box" id="box-eur-net">
         <div class="box-label">EUR Net</div>
-        <input type="number" id="eur-net" placeholder="0.00" min="0" oninput="recalc('eur-net')" />
-        <div class="box-currency">Euros · after tax</div>
-        <div class="breakdown" id="bd-eur-net"></div>
+        <div class="amount-row entered">
+          <span class="amount-tag">You enter · € after tax</span>
+          <input type="number" id="in-eur-net" placeholder="0.00" min="0" oninput="recalc('eur-net')" />
+        </div>
+        <hr class="divider" />
+        <div class="amount-row calculated">
+          <span class="amount-tag">Calculated · € after tax</span>
+          <div class="result-value result-empty" id="out-eur-net">—</div>
+        </div>
       </div>
-
 
     </div>
 
@@ -197,16 +251,12 @@
 
   <script>
     const RATE = 1.95583, SOC = 0.1378, TAX = 0.10;
-    let active = null;
 
     function grossToNet(g) {
       const soc = g * SOC, tax = (g - soc) * TAX;
-      return { net: g - soc - tax, soc, tax };
+      return g - soc - tax;
     }
 
-    // reverse: given net, find gross
-    // net = gross - gross*SOC - (gross - gross*SOC)*TAX
-    // net = gross * (1 - SOC) * (1 - TAX)
     function netToGross(n) {
       return n / ((1 - SOC) * (1 - TAX));
     }
@@ -215,60 +265,80 @@
       return n.toLocaleString('bg-BG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    function setVal(id, val) {
-      const el = document.getElementById(id);
-      el.value = val > 0 ? fmt(val).replace(/\s/g, '') : '';
+    function setOut(id, val) {
+      const el = document.getElementById('out-' + id);
+      if (val > 0) {
+        el.textContent = fmt(val);
+        el.classList.remove('result-empty');
+      } else {
+        el.textContent = '—';
+        el.classList.add('result-empty');
+      }
     }
 
-    function setBd(id, html) {
-      document.getElementById('bd-' + id).innerHTML = html;
+    function clearOut(id) {
+      const el = document.getElementById('out-' + id);
+      el.textContent = '—';
+      el.classList.add('result-empty');
     }
+
+    function setIn(id, val) {
+      const el = document.getElementById('in-' + id);
+      if (document.activeElement !== el) {
+        el.value = val > 0 ? parseFloat(val.toFixed(2)) : '';
+      }
+    }
+
+    function clearIn(id) {
+      const el = document.getElementById('in-' + id);
+      if (document.activeElement !== el) el.value = '';
+    }
+
+    const ALL = ['bgn-gross', 'eur-gross', 'bgn-net', 'eur-net'];
 
     function recalc(src) {
-      const raw = parseFloat(document.getElementById(src).value);
+      const raw = parseFloat(document.getElementById('in-' + src).value);
 
       if (!raw || raw <= 0) {
-        ['bgn-gross','bgn-net','eur-gross','eur-net'].forEach(id => {
-          if (id !== src) { document.getElementById(id).value = ''; document.getElementById('bd-'+id).innerHTML = ''; }
-        });
-        ['bgn-gross','bgn-net','eur-gross','eur-net'].forEach(id => document.getElementById('bd-'+id).innerHTML = '');
+        ALL.forEach(id => { if (id !== src) clearIn(id); clearOut(id); });
         return;
       }
 
-      let bgnGross, bgnNet, eurGross, eurNet, soc, tax;
+      let bgnGross, eurGross, bgnNet, eurNet;
 
       if (src === 'bgn-gross') {
         bgnGross = raw;
-        ({ net: bgnNet, soc, tax } = grossToNet(bgnGross));
+        bgnNet   = grossToNet(bgnGross);
         eurGross = bgnGross / RATE;
-        eurNet = bgnNet / RATE;
-      } else if (src === 'bgn-net') {
-        bgnNet = raw;
-        bgnGross = netToGross(bgnNet);
-        ({ soc, tax } = grossToNet(bgnGross));
-        eurGross = bgnGross / RATE;
-        eurNet = bgnNet / RATE;
+        eurNet   = bgnNet   / RATE;
       } else if (src === 'eur-gross') {
         eurGross = raw;
         bgnGross = eurGross * RATE;
-        ({ net: bgnNet, soc, tax } = grossToNet(bgnGross));
-        eurNet = bgnNet / RATE;
-      } else {
-        eurNet = raw;
-        bgnNet = eurNet * RATE;
+        bgnNet   = grossToNet(bgnGross);
+        eurNet   = bgnNet / RATE;
+      } else if (src === 'bgn-net') {
+        bgnNet   = raw;
         bgnGross = netToGross(bgnNet);
-        ({ soc, tax } = grossToNet(bgnGross));
+        eurGross = bgnGross / RATE;
+        eurNet   = bgnNet   / RATE;
+      } else {
+        eurNet   = raw;
+        bgnNet   = eurNet * RATE;
+        bgnGross = netToGross(bgnNet);
         eurGross = bgnGross / RATE;
       }
 
-      const vals = { 'bgn-gross': bgnGross, 'bgn-net': bgnNet, 'eur-gross': eurGross, 'eur-net': eurNet };
-      ['bgn-gross','bgn-net','eur-gross','eur-net'].forEach(id => { if (id !== src) setVal(id, vals[id]); });
+      const vals = { 'bgn-gross': bgnGross, 'eur-gross': eurGross, 'bgn-net': bgnNet, 'eur-net': eurNet };
 
-      const socFmt = fmt(soc), taxFmt = fmt(tax);
-      setBd('bgn-gross', `Social & health: −${socFmt} лв. &nbsp;·&nbsp; Tax: −${taxFmt} лв.`);
-      setBd('eur-gross', `Social & health: −${fmt(soc/RATE)} € &nbsp;·&nbsp; Tax: −${fmt(tax/RATE)} €`);
-      setBd('bgn-net',   `Gross was ${fmt(bgnGross)} лв. &nbsp;·&nbsp; Deductions: ${fmt(soc+tax)} лв.`);
-      setBd('eur-net',   `Gross was €${fmt(eurGross)} &nbsp;·&nbsp; Deductions: €${fmt((soc+tax)/RATE)}`);
+      ALL.forEach(id => {
+        if (id === src) {
+          clearOut(id); // active field: hide calculated, show what user typed
+        } else {
+          setIn(id, vals[id]);
+          clearOut(id);
+          setOut(id, vals[id]);
+        }
+      });
     }
   </script>
 </body>
