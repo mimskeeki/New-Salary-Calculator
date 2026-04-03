@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salary → EUR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #e8f0fe;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2.5rem 1.5rem 3rem;
+    }
+
+    .card {
+      background: #f4f8ff;
+      border: 1px solid #c2d4f0;
+      border-radius: 24px;
+      padding: 3rem 3rem 2.5rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    h1 {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6a8fc0;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #aabcd8;
+      margin-bottom: 2.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .box {
+      background: #eaf1fd;
+      border: 1.5px solid #c2d4f0;
+      border-radius: 16px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    .box:focus-within {
+      border-color: #1aff8c;
+      box-shadow: 0 0 0 3px rgba(26,255,140,0.15);
+    }
+
+    .box.featured {
+      border: 2.5px solid #1aff8c;
+      box-shadow: 0 0 18px rgba(26,255,140,0.22), 0 0 40px rgba(26,255,140,0.08);
+      background: #e6fff5;
+    }
+
+    .box.featured:focus-within {
+      box-shadow: 0 0 24px rgba(26,255,140,0.4), 0 0 60px rgba(26,255,140,0.15);
+    }
+
+    .box-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7a9fc8;
+    }
+
+    .box.featured .box-label {
+      color: #00aa55;
+    }
+
+    .box-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: #d0fff0;
+      color: #00883f;
+      border-radius: 6px;
+      padding: 2px 8px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .box input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid #c2d4f0;
+      border-radius: 0;
+      color: #0a1a2e;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      padding: 8px 0;
+      outline: none;
+      transition: border-color 0.18s;
+    }
+
+    .box.featured input {
+      font-size: 38px;
+      border-bottom-color: #99eecc;
+      color: #003322;
+    }
+
+    .box input::placeholder { color: #c0d4ee; }
+    .box.featured input::placeholder { color: #99ddbb; }
+
+    .box input:focus { border-bottom-color: #1aff8c; }
+
+    .box-currency {
+      font-size: 13px;
+      color: #aabcd8;
+      font-weight: 500;
+    }
+
+    .box.featured .box-currency { color: #44bb88; }
+
+    .breakdown {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #aabcd8;
+      line-height: 1.8;
+      min-height: 20px;
+    }
+
+    .box.featured .breakdown { color: #55aa80; }
+
+    .footnote {
+      font-size: 11px;
+      color: #aabcd8;
+      margin-top: 2rem;
+      line-height: 1.7;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Salary Calculator</h1>
+    <p class="subtitle">Type in any field — all others update instantly.</p>
+
+    <div class="grid">
+
+      <div class="box" id="box-bgn-gross">
+        <div class="box-label">BGN Gross</div>
+        <input type="number" id="bgn-gross" placeholder="0.00" min="0" oninput="recalc('bgn-gross')" />
+        <div class="box-currency">Bulgarian lev · before tax</div>
+        <div class="breakdown" id="bd-bgn-gross"></div>
+      </div>
+
+      <div class="box featured" id="box-eur-gross">
+        <div class="box-label">EUR Gross <span class="box-badge">primary</span></div>
+        <input type="number" id="eur-gross" placeholder="0.00" min="0" oninput="recalc('eur-gross')" />
+        <div class="box-currency">Euros · before tax</div>
+        <div class="breakdown" id="bd-eur-gross"></div>
+      </div>
+
+      <div class="box" id="box-bgn-net">
+        <div class="box-label">BGN Net</div>
+        <input type="number" id="bgn-net" placeholder="0.00" min="0" oninput="recalc('bgn-net')" />
+        <div class="box-currency">Bulgarian lev · after tax</div>
+        <div class="breakdown" id="bd-bgn-net"></div>
+      </div>
+
+      <div class="box" id="box-eur-net">
+        <div class="box-label">EUR Net</div>
+        <input type="number" id="eur-net" placeholder="0.00" min="0" oninput="recalc('eur-net')" />
+        <div class="box-currency">Euros · after tax</div>
+        <div class="breakdown" id="bd-eur-net"></div>
+      </div>
+
+    </div>
+
+    <p class="footnote">1.95583 BGN = 1 EUR &nbsp;·&nbsp; Employee social & health: 13.78% &nbsp;·&nbsp; Flat income tax: 10% on taxable base</p>
+  </div>
+
+  <script>
+    const RATE = 1.95583, SOC = 0.1378, TAX = 0.10;
+    let active = null;
+
+    function grossToNet(g) {
+      const soc = g * SOC, tax = (g - soc) * TAX;
+      return { net: g - soc - tax, soc, tax };
+    }
+
+    // reverse: given net, find gross
+    // net = gross - gross*SOC - (gross - gross*SOC)*TAX
+    // net = gross * (1 - SOC) * (1 - TAX)
+    function netToGross(n) {
+      return n / ((1 - SOC) * (1 - TAX));
+    }
+
+    function fmt(n) {
+      return n.toLocaleString('bg-BG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function setVal(id, val) {
+      const el = document.getElementById(id);
+      if (document.activeElement !== el) {
+        el.value = val > 0 ? fmt(val).replace(/\s/g, '') : '';
+      }
+    }
+
+    function setBd(id, html) {
+      document.getElementById('bd-' + id).innerHTML = html;
+    }
+
+    function recalc(src) {
+      const raw = parseFloat(document.getElementById(src).value);
+
+      if (!raw || raw <= 0) {
+        ['bgn-gross','bgn-net','eur-gross','eur-net'].forEach(id => {
+          if (id !== src) { document.getElementById(id).value = ''; document.getElementById('bd-'+id).innerHTML = ''; }
+        });
+        ['bgn-gross','bgn-net','eur-gross','eur-net'].forEach(id => document.getElementById('bd-'+id).innerHTML = '');
+        return;
+      }
+
+      let bgnGross, bgnNet, eurGross, eurNet, soc, tax;
+
+      if (src === 'bgn-gross') {
+        bgnGross = raw;
+        ({ net: bgnNet, soc, tax } = grossToNet(bgnGross));
+        eurGross = bgnGross / RATE;
+        eurNet = bgnNet / RATE;
+      } else if (src === 'bgn-net') {
+        bgnNet = raw;
+        bgnGross = netToGross(bgnNet);
+        ({ soc, tax } = grossToNet(bgnGross));
+        eurGross = bgnGross / RATE;
+        eurNet = bgnNet / RATE;
+      } else if (src === 'eur-gross') {
+        eurGross = raw;
+        bgnGross = eurGross * RATE;
+        ({ net: bgnNet, soc, tax } = grossToNet(bgnGross));
+        eurNet = bgnNet / RATE;
+      } else {
+        eurNet = raw;
+        bgnNet = eurNet * RATE;
+        bgnGross = netToGross(bgnNet);
+        ({ soc, tax } = grossToNet(bgnGross));
+        eurGross = bgnGross / RATE;
+      }
+
+      const vals = { 'bgn-gross': bgnGross, 'bgn-net': bgnNet, 'eur-gross': eurGross, 'eur-net': eurNet };
+      ['bgn-gross','bgn-net','eur-gross','eur-net'].forEach(id => { if (id !== src) setVal(id, vals[id]); });
+
+      const socFmt = fmt(soc), taxFmt = fmt(tax);
+      setBd('bgn-gross', `Social & health: −${socFmt} лв. &nbsp;·&nbsp; Tax: −${taxFmt} лв.`);
+      setBd('eur-gross', `Social & health: −${fmt(soc/RATE)} € &nbsp;·&nbsp; Tax: −${fmt(tax/RATE)} €`);
+      setBd('bgn-net',   `Gross was ${fmt(bgnGross)} лв. &nbsp;·&nbsp; Deductions: ${fmt(soc+tax)} лв.`);
+      setBd('eur-net',   `Gross was €${fmt(eurGross)} &nbsp;·&nbsp; Deductions: €${fmt((soc+tax)/RATE)}`);
+    }
+  </script>
+</body>
+</html>
