@@ -71,7 +71,7 @@
     }
 
     .box.featured:focus-within {
-      box-shadow: 0 0 24px rgba(26,255,140,0.4), 0 0 60px rgba(26,255,140,0.15);
+      box-shadow: 0 0 24px rgba(26,255,140,0.45), 0 0 60px rgba(26,255,140,0.15);
     }
 
     .box-label {
@@ -202,9 +202,9 @@
         </div>
       </div>
 
-      <!-- EUR GROSS (featured) -->
-      <div class="box featured" id="box-eur-gross">
-        <div class="box-label">EUR Gross <span class="box-badge">primary</span></div>
+      <!-- EUR GROSS -->
+      <div class="box" id="box-eur-gross">
+        <div class="box-label">EUR Gross</div>
         <div class="amount-row entered">
           <span class="amount-tag">You enter · € before tax</span>
           <input type="number" id="in-eur-gross" placeholder="0.00" min="0" oninput="recalc('eur-gross')" />
@@ -230,8 +230,8 @@
         </div>
       </div>
 
-      <!-- EUR NET -->
-      <div class="box" id="box-eur-net">
+      <!-- EUR NET (featured) -->
+      <div class="box featured" id="box-eur-net">
         <div class="box-label">EUR Net</div>
         <div class="amount-row entered">
           <span class="amount-tag">You enter · € after tax</span>
